@@ -39,7 +39,9 @@ module.exports = function(router) {
 
     .delete((req, res) => {
       debug('Deleting a toy');
-      return Toy.findByIdAndRemove(req.params._id)
+      if(!req.params._id) errorHandler(new Error('Validation Error: ID required to delete item.'), res);
+      return Toy.findById(req.params._id)
+        .then(toy => toy.remove())
         .then(() => res.sendStatus(204))
         .catch(err => errorHandler(err, res));
     });

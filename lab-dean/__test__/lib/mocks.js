@@ -9,7 +9,7 @@ const mock = module.exports = {};
 // Customer Mocks - One, Many, RemoveAll
 mock.customer = {};
 
-mock.customer.createOne = () => new Customer({ name: faker.hacker.adjective() }).save();
+mock.customer.createOne = () => new Customer({ name: faker.name.firstName() }).save();
 
 mock.customer.createMany = n =>
   Promise.all(new Array(n).fill(0).map(mock.customer.createOne));
@@ -27,8 +27,8 @@ mock.toy.createOne = () => {
     .then(customer => {
       result.customer = customer;
       return new Toy({
-        artist: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        title: faker.hacker.ingverb(),
+        toyName: faker.commerce.productName(),
+        maker: faker.company.companyName(),
         customer: customer._id.toString(),
       }).save();
     })
@@ -43,8 +43,8 @@ mock.toy.createMany = n => {
     .then(customer => {
       result.customer = customer;
       let toyProms = new Array(n).fill(0).map(() => new Toy({
-        artist: `${faker.name.firstName()} ${faker.name.lastName()}`,
-        title: faker.hacker.ingverb(),
+        toyName: faker.commerce.productName(),
+        maker: faker.company.companyName(),
         customer: customer._id.toString(),
       }).save());
       return Promise.all(toyProms);
